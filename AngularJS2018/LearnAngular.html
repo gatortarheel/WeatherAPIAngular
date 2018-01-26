@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html ng-app="root">
+<head>
+    <script src="Scripts/angular.js"></script>
+    <script src="Scripts/root.js"></script>
+</head>
+
+<body>
+    <div ng-controller="index">
+        {{message}}
+        <h4>{{potato}}</h4>
+        <div>
+            Favorite word: <input type="text" ng-model="favoriteWord" />
+            {{favoriteWord}}
+        </div>
+        <div>
+            Favorite color:
+            <input type="radio" ng-model="favoriteColor" name="fc" value="Red">Red
+            <input type="radio" ng-model="favoriteColor" name="fc" value="Green">Green
+            <input type="radio" ng-model="favoriteColor" name="fc" value="Yellow">Yellow
+            <input type="radio" ng-model="favoriteColor" name="fc" value="Blue">Blue
+            {{favoriteColor}}
+        </div>
+        <div>
+            Favorite shape:
+            <select ng-model="favoriteShape">
+                <option value="Circle">Circle</option>
+                <option value="Triangle">Triangle</option>
+                <option value="Square">Square</option>
+            </select>
+            {{favoriteShape}}
+        </div>
+        <div>
+            Number of Customers to Contact:
+            <input type="text" ng-model="customersToContact" value="100" />
+            {{price}}<br />
+            {{totalprod}}
+        </div>
+    </div>
+    <hr/>
+    <div ng-controller="index2">
+        {{message}}
+        <h4>{{potato}}</h4>
+    </div>
+</body>
+</html>

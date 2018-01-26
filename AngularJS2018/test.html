@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="Scripts/angular.js"></script>
+    <title></title>
+    <script>
+        // var app = angular.module('myApp', []);
+        //  app.controller('myCtrl', function ($scope) {
+        //      $scope.name = "John Doe";
+        //  });
+
+
+        var app = angular.module('app', []);
+
+        app.controller('MainController', ["$scope", "$http", function ($scope, $http) {
+            var url1 = 'http://api.wunderground.com/api/9e68eecb068977bb/conditions/q/VA/Glen_Allen.json';
+            //https://openweathermap.org/city/4761054
+            //api.openweathermap.org / data / 2.5 / weather ? id = 2172797
+            $http({
+                method: 'POST',
+                url: url1
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                console.log(response.data);
+                $scope.weatherDetails = response.data;
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        }]);
+
+        app.controller('ForecastController', ["$scope", "$http", function ($scope, $http) {
+            var url1 = 'http://api.wunderground.com/api/9e68eecb068977bb/forecast/q/VA/Glen_Allen.json';
+            $http({
+                method: 'POST',
+                url: url1
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                console.log("forecast:");
+                console.log(response.data);
+                $scope.forecastDetails = response.data;
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        }]);
+
+
+    </script>
+    <style>
+        table.blueTable {
+            border: 1px solid #1C6EA4;
+            background-color: #EEEEEE;
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+        }
+
+            table.blueTable td, table.blueTable th {
+                border: 1px solid #AAAAAA;
+                padding: 3px 2px;
+            }
+
+            table.blueTable tbody td {
+                font-size: 13px;
+            }
+
+            table.blueTable tr:nth-child(even) {
+                background: #D0E4F5;
+            }
+
+            table.blueTable thead {
+                background: #99BADD;
+                background: -moz-linear-gradient(top, #b2cbe5 0%, #a3c1e0 66%, #99BADD 100%);
+                background: -webkit-linear-gradient(top, #b2cbe5 0%, #a3c1e0 66%, #99BADD 100%);
+                background: linear-gradient(to bottom, #b2cbe5 0%, #a3c1e0 66%, #99BADD 100%);
+                border-bottom: 2px solid #444444;
+            }
+
+                table.blueTable thead th {
+                    font-size: 15px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    border-left: 2px solid #D0E4F5;
+                }
+
+                    table.blueTable thead th:first-child {
+                        border-left: none;
+                    }
+
+            table.blueTable tfoot {
+                font-size: 14px;
+                font-weight: bold;
+                color: #FFFFFF;
+                background: #D0E4F5;
+                background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+                background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+                background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+                border-top: 2px solid #444444;
+            }
+
+                table.blueTable tfoot td {
+                    font-size: 14px;
+                }
+
+                table.blueTable tfoot .links {
+                    text-align: right;
+                }
+
+                    table.blueTable tfoot .links a {
+                        display: inline-block;
+                        background: #1C6EA4;
+                        color: #FFFFFF;
+                        padding: 2px 8px;
+                        border-radius: 5px;
+                    }
+
+
+
+
+
+
+    #weather { font-family: "Arial", Arial, Helvetica, sans-serif; border-collapse: collapse; width: 100%; }
+
+            #weather td, #customers th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #weather tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            #weather tr:hover {
+                background-color: #ddd;
+            }
+
+            #weather th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+    </style>
+</head>
+
+<body>
+    <div ng-app="app" ng-controller="MainController">
+        <!--start-->
+        <h1>Weather {{weatherDetails.current_observation.display_location.full}}</h1>
+
+
+        <table id="weather" style="width:300px;">
+            <tr>
+                <td>{{weatherDetails.current_observation.weather}}<img ng-src="{{weatherDetails.current_observation.icon_url}}" alt="Description" /></td>
+            </tr>
+            <tr>
+                <td>{{ weatherDetails.current_observation.temperature_string}}</td>
+            </tr>
+            <tr>
+                <td>{{weatherDetails.current_observation.observation_time}}</td>
+            </tr>
+            <tr>
+                <td><img ng-src="{{weatherDetails.current_observation.image.url}}" alt="Description" /></td>
+            </tr>
+        </table>
+        
+
+        <div ng-controller="ForecastController">
+            <!--start-->
+            <h1>Weather Forecast</h1>
+            <table class="blueTable" style="width:200px;">
+                <tr ng-repeat="day in forecastDetails.forecast.simpleforecast.forecastday">
+                    <td>{{ day.date.weekday_short }}</td>
+                    <td>{{ day.conditions }}</td>
+                    <td>{{ day.high.fahrenheit }}</td>
+                    <td>{{ day.low.fahrenheit }}</td>
+                </tr>
+            </table>
+            <br />
+            <div>More Details</div>
+            <br />
+            <table id="weather">
+                <tr ng-repeat="forecastday in forecastDetails.forecast.txt_forecast.forecastday">
+                    <td>{{ forecastday.title }}</td>
+                    <td>    <img ng-src="{{forecastday.icon_url}}" alt="Description" /></td>
+                    <td>{{ forecastday.fcttext }}</td>
+
+                </tr>
+            </table>
+        </div><!--end-->
+    </div><!--end-->
+</body>
+
+</html>  
